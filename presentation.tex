@@ -4,7 +4,9 @@
 \usepackage[english]{babel}
 \usepackage{amssymb,amsfonts,amsmath,mathtext}
 \usepackage{cite,enumerate,float,indentfirst}
-\usepackage{longtable,xspace,subcaption}      
+\usepackage{longtable,xspace,subcaption}  
+\usepackage{amsmath}
+
 
 \graphicspath{{images/}}
 
@@ -55,9 +57,9 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Preliminary Concepts}
+\begin{frame}{Preliminary Concepts}{Sequence}
 \begin{itemize}
-\item items: \textit{I} = {$i_1, i_2, ..., i_m$}
+\item items: $\textit{I} = \{i_1, i_2, ..., i_m\}$
 \item itemset ($t_i$): $t_i \subseteq \textit{I}$
 \item sequence (ordered list): $s = \langle t_1, t_2, ..., t_m \rangle$
 \item size |s|: number of itemsets in s
@@ -71,13 +73,28 @@
 \item $\beta = \langle \beta_1, \beta_2, ..., \beta_m \rangle$
 \item $\alpha \sqsubseteq \beta$ (if $\alpha \neq \beta$, written as $\alpha \sqsubset \beta$)
 \item iff $\exists i_1, i_2,...,i_m$, such that\\ $1 \leq i_1 \textless i_2 \textless ... \textless i_m \leq n$ and\\ $\alpha_1 \subseteq \beta_i,\alpha_2 \subseteq \beta_{i_2},...,\alpha_m \subseteq \beta_{i_m}$
-\item $\beta$ absorbs $\alpha$: if $\beta$ contains $\alpha$ and theit \textit{support} are the same
+\item $\beta$ absorbs $\alpha$: if $\beta$ contains $\alpha$ and their \textit{support} are the same
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Preliminary Concepts}{Frequent itemsets, closed itemsets}
+\begin{frame}{Preliminary Concepts}{Support}
 \begin{itemize}
-\item itemset 
+\item $\textit{D} = \{ s_1,s_2,...,s_n \}$: sequence database
+\item each \textit{s} associated with \textit{id} (id of $s_i$ is \textit{i})
+\item |$\textit{D}$|: number of \textit{s} in \textit{D}
+\item $support(\alpha)$: number of \textit{s} in \textit{D} which contain $\alpha$\\
+$support(\alpha) = |\{ s|s \in D~and~\alpha \sqsubseteq s\}|$
+\item \textit{min\_sup}: minimum support threshold
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}{Frequent sequential pattern (FS) and closed FS (CS)}
+\begin{itemize}
+\item FS: includes all s of $\textit{support(s)} \leq \textit{min\_sup}$
+\item $CS = \{ \alpha|\alpha \in~FS~and~\nexists\beta \in$ FS\\such that $\alpha \sqsubseteq \beta~and~support(\alpha) = support(\beta)\}$
+\item {\bf {\it closed sequence mining}}: find CS above {\it min\_sup}
+\item database containment relation $D \sqsubseteq D'$:\\if $\exists$ an injective function $f : D \rightarrow D'$, s.t.\\
+$\forall s \in D, s \sqsubseteq f(s)$
 \end{itemize}
 \end{frame}
 
