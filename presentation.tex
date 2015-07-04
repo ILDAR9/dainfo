@@ -1,0 +1,112 @@
+\documentclass[14pt]{beamer}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb,amsfonts,amsmath,mathtext}
+\usepackage{cite,enumerate,float,indentfirst}
+\usepackage{longtable,xspace,subcaption}      
+
+\graphicspath{{images/}}
+
+\usetheme{Singapore}
+\usecolortheme{beaver}
+
+\setbeamercolor{footline}{fg=red}
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+    Innopolis University
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+    CloSpan
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{}%
+  page \insertframenumber{} of \inserttotalframenumber \hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\newcommand\fontvi{\fontsize{11}{7.2}\selectfont}
+\newcommand{\itemi}{\item[\checkmark]}
+\title{\fontsize{15}{15}\selectfont
+	\textbf{Mining Closed Sequential Patterns in Large Datasets
+}}
+\author{
+	\fontvi
+	\small{%	
+\emph{Presenter:}~Ildar Nurgaliev\\%
+\emph{Lab:}~Dainfos}\\%
+}
+\titlegraphic{\includegraphics[width=0.2\linewidth]{iu}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Main idea}
+  Instead of mining the complete set of frequent subsequences we mine frequent \textit{closed subsequences}
+\end{frame}
+
+\begin{frame}{Benefits}
+\begin{itemize}
+\item can mine really long sequences
+\item produce significantly less number of discovered frequent sequences
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}
+\begin{itemize}
+\item items: \textit{I} = {$i_1, i_2, ..., i_m$}
+\item itemset ($t_i$): $t_i \subseteq \textit{I}$
+\item sequence (ordered list): $s = \langle t_1, t_2, ..., t_m \rangle$
+\item size |s|: number of itemsets in s
+\item length l(s): $l(s)=\sum\limits_{i=1}^n |t_i|$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}{$\alpha$ sub-sequence of $\beta$ OR $\beta$ super-sequence of $\alpha$ (contains)}
+\begin{itemize}
+\item $\alpha = \langle \alpha_1, \alpha_2, ..., \alpha_m \rangle$
+\item $\beta = \langle \beta_1, \beta_2, ..., \beta_m \rangle$
+\item $\alpha \sqsubseteq \beta$ (if $\alpha \neq \beta$, written as $\alpha \sqsubset \beta$)
+\item iff $\exists i_1, i_2,...,i_m$, such that\\ $1 \leq i_1 \textless i_2 \textless ... \textless i_m \leq n$ and\\ $\alpha_1 \subseteq \beta_i,\alpha_2 \subseteq \beta_{i_2},...,\alpha_m \subseteq \beta_{i_m}$
+\item $\beta$ absorbs $\alpha$: if $\beta$ contains $\alpha$ and theit \textit{support} are the same
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}{Frequent itemsets, closed itemsets}
+\begin{itemize}
+\item itemset 
+\end{itemize}
+\end{frame}
+
+% \begin{frame}{Data transformation}
+% \begin{figure}
+% \center{\includegraphics[width=1.1\linewidth]{data}}
+% \end{figure}
+% \end{frame}
+
+% \begin{frame}{Results}{Classification on data with 3 labels, cross-validation = 3}
+% \fontsize{11}{14}\selectfont
+% \begin{longtable}{| c | c | c |}
+% \hline
+% Classifier & Clean features & Improvement with\\ 
+% & Performance & GA Performance\\
+% \hline
+% Gaussian Naive Bayes & 41\% (+/- 5) & 48.2\%\\
+% \hline
+% Logistic regression & 63\%  (+/- 2) & 66.3\% \\
+% \hline
+% \textbf{k-NN} & 59\% (+/- 4) & 68.6\% \\
+% \hline
+% 1-NN & 52\% (+/- 3) & 62\% \\
+% \hline
+% SVM-rbf & 62\% (+/- 9) & 66.2\% \\
+% \hline
+% SVM-inear & 60\% (+/- 3) & 65.5\% \\
+% \hline
+% \end{longtable}
+% \end{frame}
+
+\end{document}
