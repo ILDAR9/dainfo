@@ -1,12 +1,12 @@
-\documentclass[14pt]{beamer}
+\documentclass[12pt]{beamer}
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amssymb,amsfonts,amsmath,mathtext}
 \usepackage{cite,enumerate,float,indentfirst}
 \usepackage{longtable,xspace,subcaption}  
+% \usepackage{euler}
 \usepackage{amsmath}
-
 
 \graphicspath{{images/}}
 
@@ -28,7 +28,8 @@
   \end{beamercolorbox}}%
   \vskip0pt%
 }
-\newcommand\fontvi{\fontsize{11}{7.2}\selectfont}
+\fontsize{9}{10}\selectfont
+\newcommand\fontvi{\fontsize{10}{12}\selectfont}
 \newcommand{\itemi}{\item[\checkmark]}
 \title{\fontsize{15}{15}\selectfont
 	\textbf{Mining Closed Sequential Patterns in Large Datasets
@@ -98,11 +99,69 @@ $\forall s \in D, s \sqsubseteq f(s)$
 \end{itemize}
 \end{frame}
 
-% \begin{frame}{Data transformation}
-% \begin{figure}
-% \center{\includegraphics[width=1.1\linewidth]{data}}
-% \end{figure}
-% \end{frame}
+\begin{frame}{Preliminary Concepts}{Item extension}
+\begin{itemize}
+\item Given: $s = \langle t_1,...,t_m \rangle$ and item $\alpha$
+\item $s \diamond \alpha$: concatenation (I-Step or S-Step)
+\item $s \diamond_i \alpha = \langle t_1,...,t_m \cup \{ \alpha \} \rangle$ if $\forall k \in r_m, k \textless \alpha$\\ Example: $\langle (\alpha e) \rangle$ is I-Step extension of $\langle (\alpha) \rangle$
+\item $s \diamond_s \alpha = \langle t_1,...,t_m,\{ \alpha \} \rangle$\\ Example: $\langle (\alpha)(c) \rangle$ is S-Step extension of $\langle (\alpha) \rangle$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}{Sequence extension}
+\begin{itemize}
+\item Given: $s = \langle t_1,...,t_m \rangle$ and $p = \langle t_1',...,t_n' \rangle$
+\item $s \diamond p$: concatenation (itemset-extension or sequence-extension)
+\item $s \diamond_i p = \langle t_1,...,t_m \cup t_1',...,t_n' \rangle$ if $\forall k \in t_m, j \in t_1', k \textless j$
+\item $s \diamond_s p = \langle t_1,...,t_m,t_1',...,t_n' \rangle$
+\item $s' = p \diamond s$: p - prefix and s - suffix of $s'$\\ Example: $\langle (e)(\alpha) \rangle$ is prefix of $\langle (e)(abf)(bde) \rangle$ and $\langle (bf)(bde) \rangle$ is its suffix
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preliminary Concepts}{{\it s-projected} database ({\it physical projection } and {\it pseudo projection})}
+\begin{itemize}
+\item $D_s = \{p | s' \in D, s' = r \diamond p$ ~~s.t. r is minimum prefix containing s ($s \sqsubseteq r$ and $\nexists r',s \sqsubseteq r' \sqsubset r$)\}\\ p can be empty
+\end{itemize}
+\begin{figure}
+\center{\includegraphics[width=0.4\linewidth]{D}}\caption*{Example}
+\end{figure}
+\begin{itemize}
+\item $D_{\langle (\alpha f) \rangle} = \{ \langle (d)(e)(\alpha) \rangle, \langle (bde) \rangle \}$
+\item $D_{\langle (e)(\alpha) \rangle} = \{ \$,\langle (b) \rangle,\langle (\_bf)(bde) \rangle \}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lexicographic Sequence Tree}{{\it Set Lexicographic Order}}
+\begin{itemize}
+\item Let $t = \{ i_1,i_2,...,i_k\}, t'=\{j_1,j_2,...,j_l\}$, where $i_1 \leq ... \leq i_k$ and $j_1 \leq ... \leq j_l$
+\item $t < t'$ iff {\it either} of the following is true:
+\begin{enumerate}
+\item $0 \leq h \leq min\{k,l\}$, we have $i_r = j_r$ for $r < h$, and $i_h < j_h$
+\item $k < l$, and $i_1 = j_1,i_2 = j_2,...,i_k=j_k$
+\end{enumerate}
+\end{itemize}
+Example: $(a,f) < (b,f), (a,b) < (a,b,c)$ and $(a,b,c) < (b,c)$
+\end{frame}
+
+\begin{frame}{Lexicographic Sequence Tree}{{\it Sequence Lexicographic Order}}
+\begin{enumerate}[i]
+\item if $s' = s \diamond p$, then $s < s'$
+\item if $s = \alpha \diamond_i p$ and $s' = \alpha \diamond_s p'$, no matter what is order relation between $p$ and $p'$ is, $s < s'$
+\item if $ s = \alpha \diamond_i p$ and $s' = \alpha \diamond_i p',~p < p'$ indicated $s < s'$
+\item $s = \alpha \diamond_s p$ and $s' = \alpha \diamond_s p',~p < p'$ indicates $s < s'$
+\end{enumerate}
+Example: $\langle (a,b) \rangle < \langle (a,b)(a) \rangle$; $\langle (a,b) \rangle < \langle (a)(a) \rangle$
+\end{frame}
+
+\begin{frame}{Lexicographic Sequence Tree}{{\it Lexicographic Sequence Tree} construction}
+\begin{enumerate}[i]
+\item if $s' = s \diamond p$, then $s < s'$
+\item if $s = \alpha \diamond_i p$ and $s' = \alpha \diamond_s p'$, no matter what is order relation between $p$ and $p'$ is, $s < s'$
+\item if $ s = \alpha \diamond_i p$ and $s' = \alpha \diamond_i p',~p < p'$ indicated $s < s'$
+\item $s = \alpha \diamond_s p$ and $s' = \alpha \diamond_s p',~p < p'$ indicates $s < s'$
+\end{enumerate}
+Example: $\langle (a,b) \rangle < \langle (a,b)(a) \rangle$; $\langle (a,b) \rangle < \langle (a)(a) \rangle$
+\end{frame}
 
 % \begin{frame}{Results}{Classification on data with 3 labels, cross-validation = 3}
 % \fontsize{11}{14}\selectfont
