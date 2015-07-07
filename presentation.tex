@@ -8,6 +8,7 @@
 % \usepackage{euler}
 \usepackage{amsmath}
 
+\newcommand{\splitline}{\vspace{0.4cm}}
 \graphicspath{{images/}}
 
 \usetheme{Singapore}
@@ -172,17 +173,9 @@ Example: $\langle (a,b) \rangle < \langle (a,b)(a) \rangle$; $\langle (a,b) \ran
 \center{\includegraphics[width=0.4\linewidth]{D}}
 \end{frame}
 
-\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Preamble}
-	CloSpan divides mining process into 2 stages.
-	\begin{enumerate}
-	\item candidate set generation;
-	\item helps eliminate non-closed sequences.
-	\end{enumerate}
-	Search Space Pruning and Prefix Sequence Lattice is for 1st  stage.
-\end{frame}
-
 \begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{LEMMA 1 (Common Prefix)}
 LEMMA 1. {\it Given a subsequence s, and its projected database $D_s$, if $\exists\alpha$, $\alpha$ is a common prefix for all the sequences with the same extension type (either itemset or sequence - extension) in $D_s$, then $\forall\beta$, if $s \diamond \beta$ is closed, $\alpha$ must be a prefix of $\beta$. That means $\forall\beta \sqsubset \alpha$, we need not search $s \diamond \beta$ and its descendants except the branch of $s \diamond \alpha$.}\\
+\splitline
 {\bf Example:} $D_s = \{ \langle (d)(e)(af) \rangle, \langle (d)(e)(fg) \rangle \}$, all the sequences in $D_s$ share a common prefix $\alpha = \langle (d)(e) \rangle$, so any sequence with prefix {\it s} but not $s \diamond \langle (d)(e) \rangle$ must not be closed. So we can ``jump'' to the branch $s \diamond \alpha$.
 \end{frame}
 
@@ -211,10 +204,93 @@ Based on Theorem 1, the following search space pruning can be achieved.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Theorem 3 (Early Termination by Equivalence)}
+\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{LEMMA 3 (Early Termination by Equivalence)}
 LEMMA 3. {\it Given 2 sequences, $s \sqsubseteq s'$ and also $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$, then $\forall\gamma, support(s \diamond \gamma) = support(s' \diamond \gamma)$.}\\
+\splitline
 {\bf Example:} Consider D-sample on \ref{D-sample} slide.
+\begin{itemize}
+\item $\mathcal{I}(D_{\langle (af) \rangle}) = \mathcal{I}(D_{\langle (f) \rangle})$;
+\item both $\langle ((af)(d)) \rangle$ and $\langle (af)(e) \rangle$ are frequent;
+\end{itemize}
+We can conclude that the support of $\langle (af)(d) \rangle$ and $\langle (f)(d) \rangle$, $\langle (af)(e) \rangle$ and $\langle (f)(e) \rangle$ are the same without knowing the support of $\langle (f)(e) \rangle$ and $\langle (f)(d) \rangle$.
+\end{frame}
 
+\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Projected database closed set (LS)}
+\begin{itemize}
+\item $LS = \{s | support(s) \geq min\_sup \}$ and $\nexists'$, s.t $s \sqsubseteq s'$ and  $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$;
+\item $CS \subseteq LS \subseteq FS$: instead of mining CS directly, CloSpan algorithm first produces the complete set of {\it LS}
+\item then non-closed sequence elimination is applied in  {\it LS} to generate {\it CS} based of Lemma 3.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Corollary 1 (Backward Sub-Pattern)}
+Corollary 1. {\it If a sequence s < s' and $s \sqsupset s'$, the condition of $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$ is sufficient to stop searching any descendant of $s'$ in the prefix searching tree.}
+\begin{figure}
+\center{\includegraphics[width=0.6\linewidth]{backward-pattern}}
+\caption*{$s'$ is {\it backward sub-pattern} of s if $s < s'$ and $s \sqsupset s'$ ($s'$ is discovered after s)}
+\end{figure}
+{\bf Example:} $\mathcal{I}(D_{\langle (f) \rangle}) = \mathcal{I}(D_{\langle (af) \rangle}) \rightarrow D_{\langle (f) \rangle} = D_{\langle (af) \rangle}$
+\end{frame}
+
+\begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Corollary 2 (Backward Super-Pattern)}
+Corollary 2. {\it If a sequence $s < s'$ and $s \sqsupset s'$, if the condition of $\mathcal{D_s} = \mathcal{I}(D_{s'})$ holds, it is sufficient to translating the descendants of s to $s'$ instead of searching any descendant of $s'$ in the prefix search tree.}\\
+\splitline
+{\bf Example:} the same logic as in the previous example.
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{2 main steps}
+CloSpan divides mining process into 2 stages.
+\begin{enumerate}
+\item Generated the {\it LS} set, a superset of closed frequent sequences, and stores it in a prefix sequence lattice;
+\item it does post-pruning to eliminate non-closed sequences.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm1: ClosedMining({\it D, min\_sup, L})}
+\begin{figure}
+\center{\includegraphics[width=0.8\linewidth]{ClosedMining}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm2: CloSpan({\it s, $D_s$, min\_sup, L})}
+\begin{figure}
+\center{\includegraphics[width=0.6\linewidth]{CloSpan}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm2: CloSpan}
+\begin{itemize}
+\item Hash index on the size of projected database in order to speed up check on Therem 1 (1-4 lines of CloSpan);
+\item if $\mathcal{I}(D_{s'}) = \mathcal{I}(D_s)$ then;
+\item if $s \sqsubseteq s'$, then we do not add $\langle \mathcal{I}(D_s),s \rangle$;
+\item if $s' \sqsubseteq s$, then we replace $\langle \mathcal{I}(D_{s'}),s' \rangle$ with $\langle \mathcal{I}(D_s),s \rangle$.
+\end{itemize}
+\begin{figure}
+\center{\includegraphics[width=0.4\linewidth]{HashTable}}
+\caption*{$\langle \mathcal{I}(D_s),s \rangle$}
+\end{figure}
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm3: checkProjectedDBSize({\it s, k, H})}
+Corresponds to line 1-4 in Algorithm 2.
+\begin{figure}
+\center{\includegraphics[width=0.6\linewidth]{checkProjectedDBSize}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm3: hash function algorithm)}
+\begin{itemize}
+\item Database size range from 0 to $\mathcal{I}(D)$, so if the values of $\mathcal{I}(D_s)$ are dense in a small range, performance degrade
+\item $r_i = random(s_i)$ (assign sequence)
+\item $\mathcal{L}(D_s) = \mathcal{I}(D_s) + \sum^{m}_{j=1} \sum^{n}_{k=i_j+1}l(s_k)$
+\item if $s \sqsupseteq s'$, $\mathcal{L}(D_s) = \mathcal{L}(D_{s'}) \leftrightarrow \mathcal{I}(D_s) = \mathcal{I}(D_{s'})$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Closed Sequence Elimination}{Check out for super sequence}
+\begin{itemize}
+\item 
+\end{itemize}
 \end{frame}
 
 \end{document}
