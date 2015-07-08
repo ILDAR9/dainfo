@@ -5,7 +5,6 @@
 \usepackage{amssymb,amsfonts,amsmath,mathtext}
 \usepackage{cite,enumerate,float,indentfirst}
 \usepackage{longtable,xspace,subcaption}  
-% \usepackage{euler}
 \usepackage{amsmath}
 
 \newcommand{\splitline}{\vspace{0.4cm}}
@@ -246,21 +245,21 @@ CloSpan divides mining process into 2 stages.
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{CloSpan: Design and Implementation}{Algorithm1: ClosedMining({\it D, min\_sup, L})}
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm 1: ClosedMining({\it D, min\_sup, L})}
 \begin{figure}
 \center{\includegraphics[width=0.8\linewidth]{ClosedMining}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{CloSpan: Design and Implementation}{Algorithm2: CloSpan({\it s, $D_s$, min\_sup, L})}
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm 2: CloSpan({\it s, $D_s$, min\_sup, L})}
 \begin{figure}
 \center{\includegraphics[width=0.6\linewidth]{CloSpan}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{CloSpan: Design and Implementation}{Algorithm2: CloSpan}
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm : CloSpan}
 \begin{itemize}
-\item Hash index on the size of projected database in order to speed up check on Therem 1 (1-4 lines of CloSpan);
+\item Hash index on the size of projected database in order to speed up check on Theorem 1 (1-4 lines of CloSpan);
 \item if $\mathcal{I}(D_{s'}) = \mathcal{I}(D_s)$ then;
 \item if $s \sqsubseteq s'$, then we do not add $\langle \mathcal{I}(D_s),s \rangle$;
 \item if $s' \sqsubseteq s$, then we replace $\langle \mathcal{I}(D_{s'}),s' \rangle$ with $\langle \mathcal{I}(D_s),s \rangle$.
@@ -271,25 +270,39 @@ CloSpan divides mining process into 2 stages.
 \end{figure}
 \end{frame}
 
-\begin{frame}{CloSpan: Design and Implementation}{Algorithm3: checkProjectedDBSize({\it s, k, H})}
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm 3: checkProjectedDBSize({\it s, k, H})}
 Corresponds to line 1-4 in Algorithm 2.
 \begin{figure}
 \center{\includegraphics[width=0.6\linewidth]{checkProjectedDBSize}}
 \end{figure}
 \end{frame}
 
-\begin{frame}{CloSpan: Design and Implementation}{Algorithm3: hash function algorithm)}
+\begin{frame}{CloSpan: Design and Implementation}{Algorithm 3: hash function algorithm}
 \begin{itemize}
-\item Database size range from 0 to $\mathcal{I}(D)$, so if the values of $\mathcal{I}(D_s)$ are dense in a small range, performance degrade
-\item $r_i = random(s_i)$ (assign sequence)
-\item $\mathcal{L}(D_s) = \mathcal{I}(D_s) + \sum^{m}_{j=1} \sum^{n}_{k=i_j+1}l(s_k)$
-\item if $s \sqsupseteq s'$, $\mathcal{L}(D_s) = \mathcal{L}(D_{s'}) \leftrightarrow \mathcal{I}(D_s) = \mathcal{I}(D_{s'})$
+\item Database size range from 0 to $\mathcal{I}(D)$, so if the values of $\mathcal{I}(D_s)$ are dense in a small range, performance degrade;
+\item by Theorem 1 we could use necessary propositions of holding $D_s = D_{s'}$ in a part of hash key;
+\item $\mathcal{L}(D_s) = \mathcal{I}(D_s) + \sum^{m}_{j=1} \sum^{n}_{k=i_j+1}l(s_k)$;
+\item if $s \sqsupseteq s'$, $\mathcal{L}(D_s) = \mathcal{L}(D_{s'}) \leftrightarrow \mathcal{I}(D_s) = \mathcal{I}(D_{s'})$.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Non-Closed Sequence Elimination}{Check out for super sequence}
 \begin{itemize}
-\item 
+\item $support(s)$ as its Hash function 
+\item find all the sequences with the same support of s
+\item check whether there is a super-sequence containing s.
+\item if $s \sqsupseteq s'$ and $support(s) = support(s') \rightarrow \mathcal{T}(D_s) = \mathcal{T}(D_{s'})$ (corresponding sequences' id sum)
+\item that's why $\mathcal{T}(D_s) = \mathcal{T}(D_{s'})$ could be used as a Hash function instead of support (more sparse)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusion}{{\it CloSpan}}
+\begin{itemize}
+\item Solve closed sequential pattern mining problem;
+\item {\it CloSpan} outperforms {\it PrefixSpan} by more than one order of magnitude;
+\item capable of mining longer frequent sequences in a large data set with low min\_sup;
+\item it does not modify the frequent pattern mining algorithm: it only defines the early termination condition of search branch;
+\item this method can be extended to other existing sequential pattern mining algorithms (SPADE, SPAM).
 \end{itemize}
 \end{frame}
 
