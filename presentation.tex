@@ -64,7 +64,7 @@
 \item itemset ($t_i$): $t_i \subseteq \textit{I}$
 \item sequence (ordered list): $s = \langle t_1, t_2, ..., t_m \rangle$
 \item size |s|: number of itemsets in s
-\item length l(s): $l(s)=\sum\limits_{i=1}^n |t_i|$
+\item length l(s): $l(s)=\sum\limits_{i=1}^n |t_i|$ (total number of items)
 \end{itemize}
 \end{frame}
 
@@ -91,7 +91,7 @@ $support(\alpha) = |\{ s|s \in D~and~\alpha \sqsubseteq s\}|$
 
 \begin{frame}{Preliminary Concepts}{Frequent sequential pattern (FS) and closed FS (CS)}
 \begin{itemize}
-\item FS: includes all s of $\textit{support(s)} \leq \textit{min\_sup}$
+\item FS: includes all s of $\textit{support(s)} \ge \textit{min\_sup}$
 \item $CS = \{ \alpha|\alpha \in~FS~and~\nexists\beta \in$ FS\\such that $\alpha \sqsubseteq \beta~and~support(\alpha) = support(\beta)\}$
 \item {\bf {\it closed sequence mining}}: find CS above {\it min\_sup}
 \item database containment relation $D \sqsubseteq D'$:\\if $\exists$ an injective function $f : D \rightarrow D'$, s.t.\\
@@ -216,7 +216,7 @@ We can conclude that the support of $\langle (af)(d) \rangle$ and $\langle (f)(d
 
 \begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Projected database closed set (LS)}
 \begin{itemize}
-\item $LS = \{s | support(s) \geq min\_sup \}$ and $\nexists'$, s.t $s \sqsubseteq s'$ and  $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$;
+\item $LS = \{s | support(s) \geq min\_sup \}$ and $\nexists s'$, s.t $s \sqsubseteq s'$ and  $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$;
 \item $CS \subseteq LS \subseteq FS$: instead of mining CS directly, CloSpan algorithm first produces the complete set of {\it LS}
 \item then non-closed sequence elimination is applied in  {\it LS} to generate {\it CS} based of Lemma 3.
 \end{itemize}
@@ -232,7 +232,7 @@ Corollary 1. {\it If a sequence s < s' and $s \sqsupset s'$, the condition of $\
 \end{frame}
 
 \begin{frame}{Search Space Pruning and Prefix Sequence Lattice}{Corollary 2 (Backward Super-Pattern)}
-Corollary 2. {\it If a sequence $s < s'$ and $s \sqsupset s'$, if the condition of $\mathcal{D_s} = \mathcal{I}(D_{s'})$ holds, it is sufficient to translating the descendants of s to $s'$ instead of searching any descendant of $s'$ in the prefix search tree.}\\
+Corollary 2. {\it If a sequence $s < s'$ and $s \sqsupset s'$, if the condition of $\mathcal{I}(D_s) = \mathcal{I}(D_{s'})$ holds, it is sufficient to translating the descendants of s to $s'$ instead of searching any descendant of $s'$ in the prefix search tree.}\\
 \splitline
 {\bf Example:} the same logic as in the previous example.
 \end{frame}
@@ -303,6 +303,13 @@ Corresponds to line 1-4 in Algorithm 2.
 \item capable of mining longer frequent sequences in a large data set with low min\_sup;
 \item it does not modify the frequent pattern mining algorithm: it only defines the early termination condition of search branch;
 \item this method can be extended to other existing sequential pattern mining algorithms (SPADE, SPAM).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Possible improvements}{{\it CloSpan}}
+\begin{itemize}
+\item The performance of CloSpan is achieved by smart prunning method, so if we could do it more smart:
+\item use method {\it CheckAoidable}
 \end{itemize}
 \end{frame}
 
