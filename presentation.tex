@@ -308,8 +308,24 @@ Corresponds to line 1-4 in Algorithm 2.
 
 \begin{frame}{Possible improvements}{{\it CloSpan}}
 \begin{itemize}
-\item The performance of CloSpan is achieved by smart prunning method, so if we could do it more smart:
-\item use method {\it CheckAoidable}
+\item The performance of CloSpan is achieved by smart prunning method, do it more smart;
+\item Do not need to keep track of any single historical frequent closed sequence (or candidate) for a new pattern’s closure checking.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Possible improvements}{{\it BIDE algorithm}}
+\begin{enumerate}
+\item BIDE consumes much less memory and can be an order of magnitude faster than CloSpan when the support is low;
+\item BIDE has linear scalability against base size in terms of runtime efficiency and space usage;
+\item the BackScan pruning method is very effective in enhancing the performance of BIDE.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{CloSpam in trajectory Mining}{Sequential Pattern Mining from Trajectory Data}
+\begin{itemize}
+  \item need more studies: IPCA and DBScan on Trajectory data.
+  \item CloSpan could be used as unsupevised algorithm for detecting most crowded paths in a city.
+  \item ...
 \end{itemize}
 \end{frame}
 
