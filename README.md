@@ -1,2 +1,0 @@
-# dainfo
-Practise session
