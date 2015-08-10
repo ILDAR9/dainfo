@@ -33,7 +33,7 @@
 \newcommand\fontvi{\fontsize{10}{12}\selectfont}
 \newcommand{\itemi}{\item[\checkmark]}
 \title{\fontsize{15}{15}\selectfont
-	\textbf{Mining Closed Sequential Patterns in Large Datasets
+	\textbf{Dynamical Mining Closed Sequential Patterns in Large Datasets
 }}
 \author{
 	\fontvi
@@ -49,7 +49,10 @@
 \maketitle
 
 \begin{frame}{Main idea}
-  Instead of mining the complete set of frequent subsequences we mine frequent \textit{closed subsequences}
+  \begin{enumerate}
+  \item Instead of mining the complete set of frequent subsequences we mine frequent \textit{closed subsequences}.
+  \item facilitate knowledge discovery when data is {\it dynamic} and {\it distributed}.
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}{Definition of CS}{Frequent sequential pattern (FS) and closed FS (CS)}
@@ -77,12 +80,23 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Dynamical Frequent Sequence Mining}{Why}
+\begin{frame}{Dynamical CS Mining}{Why}
 \begin{itemize}
-  \item Traditional methods for data mining typically make the assumption that data is centralized and static.
-  \item Such methods waste computational and I/O resources when data is dynamic and leads to cimmunication ovehead in distributed cas.
-  \item As a result, the knowledge discovery process is harmed by slow response times.
+  \item Traditional methods for data mining typically make the assumption that data is centralized and static but we want dynamic.
+  \item Such methods waste computational and I/O resources when data is dynamic and leads to communication overhead in distributed case.
+  \item The knowledge discovery process is harmed by slow response times.
   \item Efficient implementation of incremental data mining ideas in distributed computing environments is thus becoming crucial for ensuring scalability and facilitate knowledge discovery when data is dynamic and distributed.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamical CS Mining}{Propose data structure}
+We have:
+\begin{itemize}
+  \item infinite data stream that is analysed throught slice window.
+\end{itemize}
+Easy extendable datastructure:
+\begin{itemize}
+  \item 
 \end{itemize}
 \end{frame}
 
